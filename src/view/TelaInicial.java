@@ -74,6 +74,11 @@ public class TelaInicial extends javax.swing.JFrame {
         jMenu2.setText("Cidades");
 
         jMenuItemCidadesCadastrar.setText("Cadastrar");
+        jMenuItemCidadesCadastrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCidadesCadastrarActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItemCidadesCadastrar);
 
         jMenuItemCidadesListar.setText("Listar");
@@ -84,6 +89,11 @@ public class TelaInicial extends javax.swing.JFrame {
         jMenu3.setText("Clientes");
 
         jMenuItemClientesCadastrar.setText("Cadastrar");
+        jMenuItemClientesCadastrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemClientesCadastrarActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItemClientesCadastrar);
 
         jMenuItemClientesListar.setText("Listar");
@@ -110,6 +120,18 @@ public class TelaInicial extends javax.swing.JFrame {
     private void jMenuItemSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSairActionPerformed
         this.dispose();
     }//GEN-LAST:event_jMenuItemSairActionPerformed
+
+    private void jMenuItemClientesCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemClientesCadastrarActionPerformed
+        FrmCliente tela = new FrmCliente();
+        jdpPainelInicial.add(tela);
+        tela.setVisible(true);
+    }//GEN-LAST:event_jMenuItemClientesCadastrarActionPerformed
+
+    private void jMenuItemCidadesCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCidadesCadastrarActionPerformed
+        FrmCidade tela = new FrmCidade();
+        jdpPainelInicial.add(tela);
+        tela.setVisible(true);
+    }//GEN-LAST:event_jMenuItemCidadesCadastrarActionPerformed
 
     /**
      * @param args the command line arguments
