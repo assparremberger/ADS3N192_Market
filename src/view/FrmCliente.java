@@ -5,6 +5,13 @@
  */
 package view;
 
+import dao.CidadeDAO;
+import dao.ClienteDAO;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import model.Cidade;
+import model.ClientePF;
+
 /**
  *
  * @author assparremberger
@@ -16,7 +23,26 @@ public class FrmCliente extends javax.swing.JInternalFrame {
      */
     public FrmCliente() {
         initComponents();
+        carregarCidades();
     }
+    
+    private void carregarCidades(){
+        
+        List<Cidade> listaCidades = 
+                CidadeDAO.getCidades();
+        DefaultComboBoxModel model = 
+                new DefaultComboBoxModel();
+        Cidade fake = new Cidade();
+        fake.setId(0);
+        fake.setNome("Selecione...");
+        model.addElement( fake );
+        for (Cidade cid : listaCidades) {
+            model.addElement( cid );
+        }
+        cmbCidade.setModel( model );
+        
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -107,6 +133,11 @@ public class FrmCliente extends javax.swing.JInternalFrame {
 
         btnSalvar.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         btnSalvar.setText("SALVAR");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
 
         btnLimpar.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         btnLimpar.setText("Limpar");
@@ -208,6 +239,13 @@ public class FrmCliente extends javax.swing.JInternalFrame {
     private void cbReceberEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbReceberEmailActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cbReceberEmailActionPerformed
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        // TODO add your handling code here:
+        
+        ClientePF pf = new ClientePF();
+        ClienteDAO.inserir(pf);
+    }//GEN-LAST:event_btnSalvarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
