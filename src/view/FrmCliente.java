@@ -9,6 +9,7 @@ import dao.CidadeDAO;
 import dao.ClienteDAO;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import model.Cidade;
 import model.ClientePF;
 
@@ -24,7 +25,16 @@ public class FrmCliente extends javax.swing.JInternalFrame {
     public FrmCliente() {
         initComponents();
         carregarCidades();
+        esconder();
     }
+    
+    private void esconder(){
+        lblCPF.setVisible(false);
+        txtCPF.setVisible(false);
+        lblCNPJ.setVisible(false);
+        txtCNPJ.setVisible(false);
+    }
+    
     
     private void carregarCidades(){
         
@@ -96,6 +106,11 @@ public class FrmCliente extends javax.swing.JInternalFrame {
 
         buttonGroupTipo.add(rbPF);
         rbPF.setText("Pessoa Física");
+        rbPF.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                rbPFItemStateChanged(evt);
+            }
+        });
 
         buttonGroupTipo.add(rbPJ);
         rbPJ.setText("Pessoa Jurídica");
@@ -241,11 +256,52 @@ public class FrmCliente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cbReceberEmailActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        // TODO add your handling code here:
+        String erro = "";
+        String nome = txtNome.getText();
+        Cidade cid = (Cidade) cmbCidade.getSelectedItem();
+        if( nome.isEmpty() ){
+            erro += "Nome\n";
+        }
+        if( cid.getId() == 0 ){
+            erro +="Cidade\n";
+        }
+        String cpf_cnpj = "";
+        if( rbPF.isSelected() ){
+            cpf_cnpj = txtCPF.getText();
+            if( cpf_cnpj.substring(13).equals(" ") ){
+                erro += "CPF\n";
+            }
+        }
+        if( rbPJ.isSelected() ){
+            cpf_cnpj = txtCNPJ.getText();
+            if( cpf_cnpj.substring(17).equals(" ") ){
+                erro += "CNPJ\n";
+            }
+        }
         
-        ClientePF pf = new ClientePF();
-        ClienteDAO.inserir(pf);
+        if( ! erro.isEmpty() ){
+            JOptionPane.showMessageDialog(this, 
+                "Você esqueceu de preencher os seguintes campos\n"
+                + erro );
+        }else{
+            
+        }
+        
+        
+        
+        
     }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void rbPFItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rbPFItemStateChanged
+        esconder();
+        if( rbPF.isSelected() ){
+            lblCPF.setVisible(true);
+            txtCPF.setVisible(true);
+        }else{
+            lblCNPJ.setVisible(true);
+            txtCNPJ.setVisible(true);
+        }
+    }//GEN-LAST:event_rbPFItemStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

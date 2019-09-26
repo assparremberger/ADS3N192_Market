@@ -5,6 +5,10 @@
  */
 package view;
 
+import dao.CidadeDAO;
+import javax.swing.JOptionPane;
+import model.Cidade;
+
 /**
  *
  * @author assparremberger
@@ -54,6 +58,11 @@ public class FrmCidade extends javax.swing.JInternalFrame {
 
         btnSalvar.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         btnSalvar.setText("SALVAR");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -105,6 +114,19 @@ public class FrmCidade extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        String nome = txtNome.getText();
+        if( nome.isEmpty() ){
+            JOptionPane.showMessageDialog(this, 
+                    "Você deve preencher o nome!");
+        }else{
+            Cidade cid = new Cidade();
+            cid.setNome( nome );
+            CidadeDAO.inserir( cid );
+            txtNome.setText("");
+        }
+    }//GEN-LAST:event_btnSalvarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
