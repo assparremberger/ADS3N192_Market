@@ -11,7 +11,9 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import model.Cidade;
+import model.Cliente;
 import model.ClientePF;
+import model.ClientePJ;
 
 /**
  *
@@ -114,6 +116,11 @@ public class FrmCliente extends javax.swing.JInternalFrame {
 
         buttonGroupTipo.add(rbPJ);
         rbPJ.setText("Pessoa Jurídica");
+        rbPJ.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbPJActionPerformed(evt);
+            }
+        });
 
         lblCPF.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lblCPF.setText("CPF: ");
@@ -285,13 +292,42 @@ public class FrmCliente extends javax.swing.JInternalFrame {
                 + erro );
         }else{
             
+           // Cliente cli = new Cliente();
+            
+            if( rbPF.isSelected() ){
+                ClientePF pf = new ClientePF();
+                pf.setNome( nome );
+                pf.setCidade( cid );
+                pf.setEmail( txtEmail.getText() );
+                pf.setReceberEmail( cbReceberEmail.isSelected() );
+                pf.setCpf( cpf_cnpj );
+                pf.setTipo( Cliente.PESSOA_FISICA );
+                ClienteDAO.inserir( pf );
+            }else{
+                ClientePJ pj = new ClientePJ();
+                pj.setNome( nome );
+                pj.setCidade( cid );
+                pj.setEmail( txtEmail.getText() );
+                pj.setReceberEmail( cbReceberEmail.isSelected() );
+                pj.setCnpj( cpf_cnpj );
+                pj.setTipo( Cliente.PESSOA_JURIDICA);
+                ClienteDAO.inserir( pj );
+            }
+            limpar();
         }
-        
-        
-        
-        
     }//GEN-LAST:event_btnSalvarActionPerformed
 
+    private void limpar(){
+        txtNome.setText("");
+        txtEmail.setText("");
+        txtCPF.setText("");
+        txtCNPJ.setText("");
+        cmbCidade.setSelectedIndex( 0 );
+        cbReceberEmail.setSelected( false );
+        buttonGroupTipo.clearSelection();
+        esconder();
+    }
+    
     private void rbPFItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rbPFItemStateChanged
         esconder();
         if( rbPF.isSelected() ){
@@ -302,6 +338,13 @@ public class FrmCliente extends javax.swing.JInternalFrame {
             txtCNPJ.setVisible(true);
         }
     }//GEN-LAST:event_rbPFItemStateChanged
+
+    private void rbPJActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPJActionPerformed
+        lblCPF.setVisible(false);
+        txtCPF.setVisible(false);
+        lblCNPJ.setVisible(true);
+        txtCNPJ.setVisible(true);   
+    }//GEN-LAST:event_rbPJActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

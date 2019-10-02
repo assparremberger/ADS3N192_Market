@@ -3,6 +3,7 @@ package dao;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import model.Cidade;
 import model.Cliente;
 import model.ClientePF;
@@ -32,6 +33,7 @@ public class ClienteDAO {
            + "  " + cliente.isReceberEmail()    + " , "
            + " '" + cliente.getTipo()           + "' , "
            + "  " + cliente.getCidade().getId() + " ) ";
+        JOptionPane.showMessageDialog(null, query);
         Conexao.executar(query);
         
     }
