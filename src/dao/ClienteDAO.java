@@ -72,6 +72,7 @@ public class ClienteDAO {
                 + " FROM clientes c "
                 + " INNER JOIN cidades d "
                 + " ON c.codCidade = d.id ";
+   
         ResultSet rs = Conexao.consultar( query );
         
         if( rs != null ){
@@ -82,23 +83,25 @@ public class ClienteDAO {
                     Cidade cid = new Cidade();
                     cid.setId( rs.getInt( 7 ) );
                     cid.setNome( rs.getString( 8 ) );
-                    
                     Cliente cliente = new Cliente();
                     cliente.setCidade( cid );
                     cliente.setId( rs.getInt( 1 ) );
                     cliente.setNome( rs.getString( 2 ) );
                     cliente.setEmail( rs.getString( 3 ) );
+                   
                     if( rs.getInt( 6 ) == 1 )
                         cliente.setReceberEmail( true );
                     else
                         cliente.setReceberEmail( false );
-                    
+                  
                     if( rs.getString( 5 ).equals(Cliente.PESSOA_FISICA)){
+                        // Aqui possui um erro que será corrigido
                         ClientePF pf = (ClientePF) cliente;
                         pf.setTipo( Cliente.PESSOA_FISICA );
                         pf.setCpf( rs.getString( 4 ) );
                         lista.add( pf );
                     }else{
+                        // Aqui possui um erro que será corrigido
                         ClientePJ pj = (ClientePJ) cliente;
                         pj.setTipo( Cliente.PESSOA_JURIDICA );
                         pj.setCnpj(rs.getString( 4 ) );
@@ -107,7 +110,7 @@ public class ClienteDAO {
                 }
                 
             } catch (Exception e) {
-                
+                System.out.println(e.toString());
             }
             
         }
