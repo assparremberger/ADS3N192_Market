@@ -28,15 +28,14 @@ public class ListClientes extends javax.swing.JInternalFrame {
 
     private void carregarTabela() {
         List<Cliente> lista = ClienteDAO.getClientes();
-        JOptionPane.showMessageDialog(null, "Total: " + lista.size());
         DefaultTableModel model = new DefaultTableModel();
         String[] colunas = {"Código", "Nome", "E-mail",
             "Receber E-mail", "Cidade", "Tipo", "CPF /CNPJ"};
-        if (rbPF.isSelected()) {
+        if ( rbTodos.isSelected()) {
             colunas[6] = "CPF";
             model.setColumnIdentifiers(colunas);
             for (Cliente cli : lista) {
-                if (cli.getTipo().equals(Cliente.PESSOA_FISICA)) {
+                if ( cli.getTipo().equals( Cliente.PESSOA_FISICA ) ) {
                     ClientePF pf = (ClientePF) cli;
                     String receberEmail = "Não";
                     if (pf.isReceberEmail()) 
@@ -80,6 +79,7 @@ public class ListClientes extends javax.swing.JInternalFrame {
         setTitle("Lista de Clientes");
 
         buttonGroupTipo.add(rbTodos);
+        rbTodos.setSelected(true);
         rbTodos.setText("Todos");
 
         buttonGroupTipo.add(rbPF);
