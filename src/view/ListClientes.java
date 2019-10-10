@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Cliente;
 import model.ClientePF;
+import model.ClientePJ;
 
 /**
  *
@@ -27,32 +28,50 @@ public class ListClientes extends javax.swing.JInternalFrame {
     }
 
     private void carregarTabela() {
-        List<Cliente> lista = ClienteDAO.getClientes();
+        List<?> lista;
         DefaultTableModel model = new DefaultTableModel();
         String[] colunas = {"Código", "Nome", "E-mail",
             "Receber E-mail", "Cidade", "Tipo", "CPF /CNPJ"};
-        if ( rbTodos.isSelected()) {
+        
+        if ( rbPF.isSelected()) {
             colunas[6] = "CPF";
-            model.setColumnIdentifiers(colunas);
-            for (Cliente cli : lista) {
-                if ( cli.getTipo().equals( Cliente.PESSOA_FISICA ) ) {
-                    ClientePF pf = (ClientePF) cli;
-                    String receberEmail = "Não";
-                    if (pf.isReceberEmail()) 
-                        receberEmail = "Sim";
-                    
-                    Object[] linha = {
+            lista = ClienteDAO.getClientesPF();
+        }else if( rbPJ.isSelected() ){
+            colunas[6] = "CNPJ";
+            lista = ClienteDAO.getClientesPJ(); 
+        }else{ 
+            lista = ClienteDAO.getClientes();
+        }
+            
+        model.setColumnIdentifiers(colunas);
+        
+        for (Object cli : lista) {
+            Cliente cliente = (Cliente) cli;
+            String receberEmail = "Não";
+            if (cliente.isReceberEmail()) 
+                receberEmail = "Sim";
+            
+            Object[] linha = {};
+            
+            if ( cliente.getTipo().equals( Cliente.PESSOA_FISICA ) ) {
+                ClientePF pf = (ClientePF) cli;
+                linha = new Object[]{
                         pf.getId(), pf.getNome(),
                         pf.getEmail(), receberEmail,
                         pf.getCidade().getNome(), "Pessoa Física",
                         pf.getCpf()};
-                    model.addRow( linha );
-
-                }
+            }else{
+                ClientePJ pj = (ClientePJ) cli;
+                linha = new Object[]{
+                        pj.getId(), pj.getNome(),
+                        pj.getEmail(), receberEmail,
+                        pj.getCidade().getNome(), "Pessoa Jurídica",
+                        pj.getCnpj()};
             }
+            model.addRow( linha );
         }
+        
         tableClientes.setModel( model );
-
     }
 
     /**
@@ -81,12 +100,27 @@ public class ListClientes extends javax.swing.JInternalFrame {
         buttonGroupTipo.add(rbTodos);
         rbTodos.setSelected(true);
         rbTodos.setText("Todos");
+        rbTodos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbTodosActionPerformed(evt);
+            }
+        });
 
         buttonGroupTipo.add(rbPF);
         rbPF.setText("Pessoa Física");
+        rbPF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbPFActionPerformed(evt);
+            }
+        });
 
         buttonGroupTipo.add(rbPJ);
         rbPJ.setText("Pessoa Jurídica");
+        rbPJ.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbPJActionPerformed(evt);
+            }
+        });
 
         tableClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -100,6 +134,11 @@ public class ListClientes extends javax.swing.JInternalFrame {
         jScrollPane1.setViewportView(tableClientes);
 
         btnExcluir.setText("Excluir");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -142,6 +181,36 @@ public class ListClientes extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void rbTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbTodosActionPerformed
+        carregarTabela();
+    }//GEN-LAST:event_rbTodosActionPerformed
+
+    private void rbPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPFActionPerformed
+        carregarTabela();
+    }//GEN-LAST:event_rbPFActionPerformed
+
+    private void rbPJActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPJActionPerformed
+        carregarTabela();
+    }//GEN-LAST:event_rbPJActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        int linha = tableClientes.getSelectedRow();   
+        if( linha < 0 ){
+            JOptionPane.showMessageDialog(this, 
+                "Você deve selecionar um cliente!");
+        }else{
+            int id = (int) tableClientes.getValueAt(linha, 0);
+            String nome = (String) tableClientes.getValueAt(linha, 1);
+            int resposta = JOptionPane.showConfirmDialog(this, 
+                    "Confirma a exclusão do cliente " + nome + "?", 
+                    "Excluir Cliente", JOptionPane.YES_NO_OPTION);
+            if( resposta == JOptionPane.YES_OPTION ){
+                ClienteDAO.excluir( id );
+                carregarTabela();
+            }
+        }
+    }//GEN-LAST:event_btnExcluirActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
