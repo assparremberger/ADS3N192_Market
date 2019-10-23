@@ -18,9 +18,36 @@ public class FrmCidade extends javax.swing.JInternalFrame {
     /**
      * Creates new form FrmCidade
      */
+   private Cidade cidade;
+    
+    private ListCidades telaListCidades;
+    /**
+     * Creates new form FrmCidades
+     */
     public FrmCidade() {
         initComponents();
+        lblCodigo.setVisible(false);
+        lblCodigoValor.setVisible(false);
     }
+    
+    // Este método Construtor recebe o id da Cidade que será editada e a 
+    // referência da tela ListCidades que chamou este formulário, para que ao 
+    // final da edição a tebela no ListCidades possa ser atualizada, senão o 
+    // usuário pensará que não salvou a alteração no banco
+    public FrmCidade(int idCidade, ListCidades telaListCidades) {
+        initComponents();
+        lblCodigo.setVisible(false);
+        lblCodigoValor.setVisible(false);
+        carregarFormulario( idCidade );
+        this.telaListCidades = telaListCidades;
+    }
+    
+    private void carregarFormulario( int idCidade ){
+        cidade = CidadeDAO.getCidadeById( idCidade );
+        lblCodigoValor.setText( String.valueOf( cidade.getId() ) );
+        txtNome.setText( cidade.getNome() );
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -121,10 +148,29 @@ public class FrmCidade extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, 
                     "Você deve preencher o nome!");
         }else{
-            Cidade cid = new Cidade();
-            cid.setNome( nome );
-            CidadeDAO.inserir( cid );
-            txtNome.setText("");
+            // se cidade for igual a NULL então significa que o formulário está
+            // sendo usado para cadastrar uma nova cidade
+            // se não for NULL então significa que passou pelo método construtor
+            // que recebe uma cidade do banco e preenche o formulário para poder
+            // editar uma cidade
+            if( cidade == null ){
+                cidade = new Cidade();
+                cidade.setNome( nome );
+                CidadeDAO.inserir( cidade );
+                
+                // Só limpar
+                txtNome.setText("");
+            }else{
+                cidade.setNome( nome );
+                CidadeDAO.editar(cidade );
+                
+                // Assim que a cidade for editada, a tabela na tela ListCidades 
+                // será recarregada
+                telaListCidades.carregarTabela();
+                
+                //Fechar a tela
+                this.dispose();
+            }
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
 

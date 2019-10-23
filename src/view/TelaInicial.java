@@ -82,6 +82,11 @@ public class TelaInicial extends javax.swing.JFrame {
         jMenu2.add(jMenuItemCidadesCadastrar);
 
         jMenuItemCidadesListar.setText("Listar");
+        jMenuItemCidadesListar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCidadesListarActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItemCidadesListar);
 
         jMenuBar1.add(jMenu2);
@@ -143,6 +148,12 @@ public class TelaInicial extends javax.swing.JFrame {
         jdpPainelInicial.add(tela);
         tela.setVisible( true );
     }//GEN-LAST:event_jMenuItemClientesListarActionPerformed
+
+    private void jMenuItemCidadesListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCidadesListarActionPerformed
+        ListCidades tela = new ListCidades( jdpPainelInicial );
+        jdpPainelInicial.add(tela);
+        tela.setVisible( true );
+    }//GEN-LAST:event_jMenuItemCidadesListarActionPerformed
 
     /**
      * @param args the command line arguments
